@@ -1,19 +1,27 @@
 import { FlatList, TouchableOpacity, View } from "react-native"
 import { toggleHabit } from "../../services/toggle-habit"
 import { colorSchemas, fontSizeSchemas } from "../../themes/default"
-import { Button, Checkbox, Typography } from "../ui"
+import { Button, Checkbox, Modal, Typography } from "../ui"
 import { useNavigation } from "@react-navigation/native"
+import { FontAwesome6 } from '@expo/vector-icons'
+import { generatePromptHabit } from "../../utils/generate-prompt-habit"
+import { openAiPost } from "../../services/openai"
+import { useState } from "react"
+
+import { hintForRoutine } from "../../utils/hints-for-routine"
 
 interface ListOfHabitsPropsType {
   possibleHabits: never[]
   completedHabits: never[]
   refetch: () => Promise<void>
+  handleSuggest: () => void
 }
 
-export function ListOfHabits({ completedHabits, possibleHabits, refetch }: ListOfHabitsPropsType) {
-
+export function ListOfHabits({ completedHabits, possibleHabits, refetch,handleSuggest }: ListOfHabitsPropsType) {
   const navigation = useNavigation()
   return (
+    <>
+    
     <FlatList
       data={possibleHabits}
       keyExtractor={i => i.id}
@@ -53,8 +61,14 @@ export function ListOfHabits({ completedHabits, possibleHabits, refetch }: ListO
       ListHeaderComponent={() =>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography style={{ fontSize: fontSizeSchemas["3xl"], fontWeight: '700' }} text="Hábito para hoje" />
-          <View style={{ width: '20%' }}>
-            <Button variants="tertiary" onPress={() => navigation.navigate('habit' as never)} >
+          <View style={{ width: '40%', flexDirection: "row", gap: 12 }}>
+            <Button variants="primary" onPress={handleSuggest}>
+              <FontAwesome6
+                name="robot"
+                style={{ color: colorSchemas.white[500] }}
+              />
+            </Button>
+            <Button style={{ width: "100%" }} variants="tertiary" onPress={() => navigation.navigate('habit' as never)} >
               <Typography text="Criar" />
             </Button>
           </View>
@@ -66,5 +80,6 @@ export function ListOfHabits({ completedHabits, possibleHabits, refetch }: ListO
         </View>
       }
     />
+    </>
   )
 }

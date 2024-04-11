@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Linking, View } from "react-native";
 import { BaseScreen } from "../../components/base-screen";
 import { Header } from "../../components/header";
 import { Button, ModalConfirmation, TextField, Typography } from "../../components/ui";
@@ -14,6 +14,7 @@ import { deleteHabit } from "../../services/delete-habit";
 import { Weekday } from "../../types/weekday";
 import { Schedule } from "../../components/schedule";
 import { updateHabit } from "../../services/update-habit";
+import { SaveAtGoogleCalendar } from "../../components/save-at-google-calendar";
 
 const availableWeekDays = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
 
@@ -49,7 +50,6 @@ export function Habit({ route: { params } }) {
         }
         return i
       })
-      console.log(copy)
       setWeekdays(copy)
     }
   }
@@ -63,7 +63,6 @@ export function Habit({ route: { params } }) {
         setDescription(data.description)
         setTitle(data.name)
         setWeekdays(data.weekdays)
-        console.log(data.weekdays)
       }
     }
     setIsLoading(false)
@@ -119,6 +118,12 @@ export function Habit({ route: { params } }) {
       })
       navigation.navigate('home' as never)
     }
+  }
+
+  function saveAtGoogleCalendar() {
+    Linking.openURL(`https://calendar.google.com/calendar/u/0/r/eventedit?text=${title}&details=${description}&dates=20241231T170000&recur=RRULE:FREQ=WEEKLY;BYDAY=${weekdays.map( i => String(i.weekday),)};BYHOUR=${weekdays.map( i => String(i.timeInSeconds).slice(0,1),)};BYMINUTE=0
+
+    `)
   }
 
   useLayoutEffect(() => {
@@ -181,6 +186,7 @@ export function Habit({ route: { params } }) {
             />
           )}
         </View>
+        <SaveAtGoogleCalendar onClickToSave={saveAtGoogleCalendar} />
         <Button onPress={async () => {
           if (!isEditing) {
             await handleHabitAction()

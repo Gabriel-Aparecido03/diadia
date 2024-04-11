@@ -10,7 +10,7 @@ interface SchedulePropsType {
   checked: boolean
   weekdayIndex: number
   timeInSecondsInitial: string
-  onChange: ({ index, value }: { value: string, index: number }) => void
+  onChange: ({ index, value }: { value: number, index: number }) => void
 }
 
 export function Schedule({ handleToggleWeekDay, weekdayName, checked, weekdayIndex, timeInSecondsInitial, onChange }: SchedulePropsType) {
@@ -32,7 +32,7 @@ export function Schedule({ handleToggleWeekDay, weekdayName, checked, weekdayInd
         value={maskHourAndMinutes(timeInSeconds)}
         onChangeText={e => {
           setTimeInSeconds(e)
-          onChange({ index : weekdayIndex , value : timeInSeconds})
+          onChange({ index : weekdayIndex , value : Number(timeInSeconds)})
         }}
       />
     </View>

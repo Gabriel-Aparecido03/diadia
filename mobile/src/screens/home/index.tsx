@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { colorSchemas } from "../../themes/default";
 import { Header } from "../../components/header";
 import { WeekSummary } from "../../components/week-summary";
-import { Button, Typography } from "../../components/ui";
+import { Button, Modal, Typography } from "../../components/ui";
 import { BaseScreen } from "../../components/base-screen";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -13,6 +13,7 @@ import { gettingGoalsToday } from "../../services/getting-goals-today";
 import { ListOfHabits } from "../../components/list-of-habits";
 import { ListOfGoals } from "../../components/list-of-goals";
 import { toggleGoal } from "../../services/toggle-goal";
+import { hintForRoutine } from "../../utils/hints-for-routine";
 
 export function Home() {
 
@@ -26,6 +27,9 @@ export function Home() {
 
   const [possibleGoals, setPossibleGoals] = useState([])
   const [completedGoals, setCompletedGoals] = useState([])
+
+  const [showHintModal, setShowHintModal] = useState(false)
+  const [hint, setHint] = useState({})
 
 
   async function fetchHabits() {
@@ -54,8 +58,23 @@ export function Home() {
     Promise.all([fetchGoals(), fetchHabits()])
   }, [isFocused])
 
+
+  async function handleSuggest() {
+    setHint(hintForRoutine[Math.floor(Math.random() * hintForRoutine.length)])
+    setShowHintModal(true)
+  }
+
   return (
-    <BaseScreen header={<Header />} showLoading={loading}>
+    <BaseScreen modal={
+      <Modal
+        onClose={() => setShowHintModal(false)}
+        open={showHintModal}
+        subtitle={hint.subtitle}
+        title={hint.title}
+      />
+    }
+      header={<Header />}
+      showLoading={loading}>
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <View style={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
           <WeekSummary />
@@ -63,6 +82,7 @@ export function Home() {
             completedHabits={completedHabits}
             possibleHabits={possibleHabits}
             refetch={fetchHabits}
+            handleSuggest={handleSuggest}
           />
           <ListOfGoals
             completedGoals={completedGoals}

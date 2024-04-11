@@ -42,7 +42,6 @@ export function UserContextProvider({ children }: UserContextProvider) {
     try {
       const res = await gettingAccountInfos()
       if (res.status === 200) {
-        console.log(res.data)
         setUser({
           email: res.data.email,
           username: res.data.name,
