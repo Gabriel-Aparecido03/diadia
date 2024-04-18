@@ -29,13 +29,17 @@ export function UserContextProvider({ children }: UserContextProvider) {
   const [user, setUser] = useState<User | null>(null)
 
   async function makeLogin(email: string, password: string) {
-    const res = await authenticateUserAccount({ email, password })
-    if (res.status === 200) {
-      await saveTokenAtStorage(res.data.access_token)
-      await gettingUserInfo()
-      return true
+    try {
+      const res = await authenticateUserAccount({ email, password })
+      if (res.status === 200) {
+        await saveTokenAtStorage(res.data.access_token)
+        await gettingUserInfo()
+        return true
+      }
+      return false
+    } catch (error) {
+      throw error
     }
-    return false
   }
 
   async function gettingUserInfo() {

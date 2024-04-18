@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 type ButtonProps = TouchableOpacityProps & {
   children?: ReactNode,
-  variants?: 'primary' | 'secondary' | 'tertiary'
+  variants?: 'primary' | 'secondary' | 'tertiary' | 'error'
 }
 
 export function Button({ children, variants = "primary", style, ...props }: ButtonProps) {
@@ -17,6 +17,9 @@ export function Button({ children, variants = "primary", style, ...props }: Butt
       break;
     case "tertiary":
       variantStyle = styles.tertiary
+      break;
+    case "error" : 
+      variantStyle = styles.error
       break;
     default:
       variantStyle = styles.primary;

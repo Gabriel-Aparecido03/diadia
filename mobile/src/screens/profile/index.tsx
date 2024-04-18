@@ -104,7 +104,6 @@ export function Profile() {
 
   return (
     <BaseScreen header={<Header showBackButton />}>
-      <Typography text="Criação de um hábito" style={{ fontSize: fontSizeSchemas["3xl"], fontWeight: '700' }} />
       <View style={{ marginTop: 12, marginBottom: 16, gap: 8 }}>
         <Typography style={{ fontWeight: '700', fontSize: fontSizeSchemas["3xl"] }} text="Perfil" />
       </View>
@@ -153,15 +152,17 @@ export function Profile() {
           <Typography text={"Salvar"} />
         </Button>
 
-        <Button onPress={() => {
-          makeLogout()
-          navigation.navigate('login' as never)
-        }} style={{ marginTop: 24 }} variants="tertiary" >
-          <Typography text={"Sair"} />
-        </Button>
-        <Button onPress={handleProfileDelete} style={{ marginTop: 24 }} variants="tertiary" >
-          <Typography text={"Apagar"} />
-        </Button>
+        <View style={{ marginTop: 36, gap: 12 }}>
+          <Button onPress={handleProfileDelete} style={{ marginTop: 24 }} variants="error" >
+            <Typography text={"Apagar"} />
+          </Button>
+          <Button onPress={() => {
+            makeLogout()
+            navigation.navigate('login' as never)
+          }} style={{ marginTop: 24 }} variants="tertiary" >
+            <Typography text={"Sair"} />
+          </Button>
+        </View>
 
       </View>
     </BaseScreen>

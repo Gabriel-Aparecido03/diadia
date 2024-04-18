@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   containerWithBack: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    width: '40%',
+    width: '20%',
     flexDirection : 'row'
   },
 })

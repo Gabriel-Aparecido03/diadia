@@ -121,7 +121,7 @@ export function Habit({ route: { params } }) {
   }
 
   function saveAtGoogleCalendar() {
-    Linking.openURL(`https://calendar.google.com/calendar/u/0/r/eventedit?text=${title}&details=${description}&dates=20241231T170000&recur=RRULE:FREQ=WEEKLY;BYDAY=${weekdays.map( i => String(i.weekday),)};BYHOUR=${weekdays.map( i => String(i.timeInSeconds).slice(0,1),)};BYMINUTE=0
+    Linking.openURL(`https://calendar.google.com/calendar/u/0/r/eventedit?text=${title}&details=${description}&dates=20241231T170000&recur=RRULE:FREQ=WEEKLY;BYDAY=${weekdays.map(i => String(i.weekday),)};BYHOUR=${weekdays.map(i => String(i.timeInSeconds).slice(0, 1),)};BYMINUTE=0
 
     `)
   }
@@ -130,7 +130,6 @@ export function Habit({ route: { params } }) {
     getInfosAboutHabit()
   }, [])
 
-  if (isLoading) return null
 
   return (
     <BaseScreen
@@ -145,69 +144,72 @@ export function Habit({ route: { params } }) {
           onClose={() => { setShowModal(false) }}
         />
       }
+      showLoading={isLoading}
     >
-      <Typography text="Criação de um hábito" style={{ fontSize: fontSizeSchemas["3xl"], fontWeight: '700' }} />
-      <View style={{ marginTop: 12, marginBottom: 16 }}>
-        <Typography style={{ marginBottom: 12 }} text="Qual o seu comprometimento ?" />
-        <TextField
-          placeholder="Exercicios,leitura,dormim bem, etc ..."
-          value={title}
-          onChangeText={e => setTitle(e)}
-          error={titleInvalid}
-          errorMessage="O título é obrigatório"
-        />
-      </View>
-      <View style={{ marginTop: 12, marginBottom: 16 }}>
-        <Typography style={{ marginBottom: 12 }} text="Detalhes do hábitos" />
-        <TextField
-          placeholder="Exercicios,leitura,dormim bem, etc ..."
-          value={description}
-          onChangeText={e => setDescription(e)}
-          error={descriptionInvalid}
-          errorMessage="A descrição é obrigatória"
-          multiline
-        />
-      </View>
-      <View>
-        <View style={styles.containerSchedule}>
-          <Typography text="Dia da semana" />
-          <Typography text="Horário" />
+      {!isLoading && <>
+        <Typography text="Criação de um hábito" style={{ fontSize: fontSizeSchemas["3xl"], fontWeight: '700' }} />
+        <View style={{ marginTop: 12, marginBottom: 16 }}>
+          <Typography style={{ marginBottom: 12 }} text="Qual o seu comprometimento ?" />
+          <TextField
+            placeholder="Exercicios,leitura,dormim bem, etc ..."
+            value={title}
+            onChangeText={e => setTitle(e)}
+            error={titleInvalid}
+            errorMessage="O título é obrigatório"
+          />
         </View>
-        <View style={styles.containerListOfDays} >
-          {availableWeekDays.map((i, x) =>
-            <Schedule
-              key={x}
-              checked={weekdays.some(aux => aux.weekday === x)}
-              handleToggleWeekDay={handleToggleWeekDay}
-              weekdayIndex={x}
-              weekdayName={i}
-              timeInSecondsInitial={String(weekdays[x]?.timeInSeconds ?? '')}
-              onChange={handleChangeTime}
-            />
-          )}
+        <View style={{ marginTop: 12, marginBottom: 16 }}>
+          <Typography style={{ marginBottom: 12 }} text="Detalhes do hábitos" />
+          <TextField
+            placeholder="Exercicios,leitura,dormim bem, etc ..."
+            value={description}
+            onChangeText={e => setDescription(e)}
+            error={descriptionInvalid}
+            errorMessage="A descrição é obrigatória"
+            multiline
+          />
         </View>
-        <SaveAtGoogleCalendar onClickToSave={saveAtGoogleCalendar} />
-        <Button onPress={async () => {
-          if (!isEditing) {
-            await handleHabitAction()
-            return;
-          }
-          setShowModal(true)
-          setIsDeleting(false)
-        }}
-          style={{ marginTop: 32 }} variants="secondary" >
-          <Typography text={isEditing ? "Salvar hábito" : "Criar hábito"} />
-        </Button>
-        {isEditing &&
-          <Button onPress={() => {
+        <View>
+          <View style={styles.containerSchedule}>
+            <Typography text="Dia da semana" />
+            <Typography text="Horário" />
+          </View>
+          <View style={styles.containerListOfDays} >
+            {availableWeekDays.map((i, x) =>
+              <Schedule
+                key={x}
+                checked={weekdays.some(aux => aux.weekday === x)}
+                handleToggleWeekDay={handleToggleWeekDay}
+                weekdayIndex={x}
+                weekdayName={i}
+                timeInSecondsInitial={String(weekdays[x]?.timeInSeconds ?? '')}
+                onChange={handleChangeTime}
+              />
+            )}
+          </View>
+          <SaveAtGoogleCalendar onClickToSave={saveAtGoogleCalendar} />
+          <Button onPress={async () => {
+            if (!isEditing) {
+              await handleHabitAction()
+              return;
+            }
             setShowModal(true)
-            setIsDeleting(true)
+            setIsDeleting(false)
           }}
-            style={{ marginTop: 24 }} variants="tertiary" >
-            <Typography text={"Apagar hábito"} />
+            style={{ marginTop: 32 }} variants="secondary" >
+            <Typography text={isEditing ? "Salvar hábito" : "Criar hábito"} />
           </Button>
-        }
-      </View>
+          {isEditing &&
+            <Button onPress={() => {
+              setShowModal(true)
+              setIsDeleting(true)
+            }}
+              style={{ marginTop: 24 }} variants="tertiary" >
+              <Typography text={"Apagar hábito"} />
+            </Button>
+          }
+        </View>
+      </>}
     </BaseScreen>
   )
 }

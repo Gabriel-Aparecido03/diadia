@@ -30,7 +30,7 @@ export function Modal({ onClose, open, subtitle, title }: ModalPropsType) {
           </TouchableOpacity>
         </View>
         <View style={styles.contentModal}>
-          <Typography text={subtitle} style={{ fontWeight: '400', fontSize: fontSizeSchemas.lg, textAlign: 'center' }} />
+          <Typography text={subtitle} style={{ fontWeight: '400', fontSize: fontSizeSchemas.lg, textAlign: 'center',lineHeight : 24 }} />
         </View>
       </View>
     </View>

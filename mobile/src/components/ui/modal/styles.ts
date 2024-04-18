@@ -8,14 +8,14 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     backgroundColor: colorSchemas.black[500],
-    opacity: 0.9,
+    opacity: 0.98,
   },
   containerModal: {
     minHeight: 140,
     backgroundColor: colorSchemas.zinc[900],
     borderRadius: 12,
     padding: 16,
-    width: '80%',
+    width: '90%',
     opacity: 1,
     zIndex : 9
   },

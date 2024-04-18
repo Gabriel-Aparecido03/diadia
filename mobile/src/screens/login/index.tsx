@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { validateEmail } from "../../utils/validate-email";
 import { useUser } from "../../hooks/useUser";
+import Toast from "react-native-toast-message";
 
 export function Login() {
 
@@ -52,8 +53,13 @@ export function Login() {
     if (validatedFields()) {
       const res  =  await makeLogin(email,password)
       if(res) {
-        navigation.navigate('home' as never)
+        return navigation.navigate('home' as never)
       }
+      Toast.show({
+        type : 'error',
+        text1 : 'Email e/ou senha inválidos',
+        text2  : 'Valide que seja um senha/email válido, ou o email ja esteja cadastrado !'
+      })
     }
   }
 
@@ -92,7 +98,7 @@ export function Login() {
               errorMessage={passwordInvalidMessage}
             />
           </View>
-          <Button onPress={handleMakeLogin} variants="primary" style={{ marginTop: 12 }}>
+          <Button onPress={handleMakeLogin} variants="primary" style={{ marginTop: 12, width : '80%' }}>
             <Typography style={{ fontWeight: '800', fontSize: fontSizeSchemas.lg }} text="Acessar" />
           </Button>
           <Typography

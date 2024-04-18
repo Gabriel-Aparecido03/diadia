@@ -14,7 +14,7 @@ import { ListOfHabits } from "../../components/list-of-habits";
 import { ListOfGoals } from "../../components/list-of-goals";
 import { toggleGoal } from "../../services/toggle-goal";
 import { hintForRoutine } from "../../utils/hints-for-routine";
-
+import { MaterialIcons } from '@expo/vector-icons';
 export function Home() {
 
   const isFocused = useIsFocused();
@@ -90,9 +90,12 @@ export function Home() {
             refetch={fetchGoals}
           />
         </View>
-        <View style={{ alignItems: 'center' }}>
-          <Button variants="tertiary" style={{ width: '50%' }}>
-            <Typography style={{ color: colorSchemas.violet[400] }} text="Resumo" />
+        <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 }}>
+          <Button variants="primary" style={{ width: '50%' }}>
+            <Typography text="Resumo" />
+          </Button>
+          <Button variants="tertiary" style={{ width: '16%' }} onPress={handleSuggest}>
+            <MaterialIcons name="tips-and-updates" size={24} color={colorSchemas.violet[500]} />
           </Button>
         </View>
       </View>

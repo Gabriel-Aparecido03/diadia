@@ -8,8 +8,6 @@ export const styles = StyleSheet.create({
     padding: 2,
     minHeight: 52,
     borderRadius: 8,
-    width: '100%',
-    flex : 1,
     alignItems : 'center',
     borderWidth : 1,
     borderStyle : "solid"
@@ -25,5 +23,9 @@ export const styles = StyleSheet.create({
   tertiary : {
     backgroundColor : 'transparent',
     borderColor: colorSchemas.violet[500],
+  },
+  error : {
+    backgroundColor : colorSchemas.red[500],
+    borderColor: colorSchemas.red[500],
   }
 })

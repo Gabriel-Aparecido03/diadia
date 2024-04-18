@@ -3,7 +3,8 @@ import { toggleGoal } from "../../services/toggle-goal"
 import { colorSchemas, fontSizeSchemas } from "../../themes/default"
 import { Button, Checkbox, Typography } from "../ui"
 import { useNavigation } from "@react-navigation/native"
-
+import { AntDesign } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 interface ListOfGoalsPropsType {
   possibleGoals: never[]
   completedGoals: never[]
@@ -37,13 +38,12 @@ export function ListOfGoals({ completedGoals, possibleGoals, refetch }: ListOfGo
             checked={completedGoals.find(i => i.id === item.id)}
           />
           <View>
-            <Button
+            <TouchableOpacity
               onPress={() => navigation.navigate('goal', { id: item.id })}
-              style={{ width: '60%' }}
-              variants="tertiary"
+              style={{ marginLeft : 36 }}
             >
-              <Typography text="editar" />
-            </Button>
+              <Ionicons name="pencil-sharp" size={24} color={colorSchemas.white[500]} />
+            </TouchableOpacity>
           </View>
         </TouchableOpacity>
       }
@@ -52,16 +52,16 @@ export function ListOfGoals({ completedGoals, possibleGoals, refetch }: ListOfGo
       ListHeaderComponent={() =>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography style={{ fontSize: fontSizeSchemas["3xl"], fontWeight: '700' }} text="Metas ativa !" />
-          <View style={{ width: '20%' }}>
-            <Button variants="tertiary" onPress={() => navigation.navigate('goal' as never)} >
-              <Typography text="Criar" />
+          <View style={{ width: '16%' }}>
+            <Button variants="primary" onPress={() => navigation.navigate('goal' as never)} >
+              <AntDesign name="plus" size={20} color={colorSchemas.white[500]} />
             </Button>
           </View>
         </View>
       }
       ListEmptyComponent={() =>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-          <Typography style={{ marginTop : 8, color: colorSchemas.zinc[400], textAlign: 'center', width: '80%', marginHorizontal: '10%' }} text="Você não nenhuma meta cadastrada ainda ! Começe cadastrando a primeira" />
+          <Typography style={{ marginTop: 8, color: colorSchemas.zinc[400], textAlign: 'center', width: '80%', marginHorizontal: '10%' }} text="Você não nenhuma meta cadastrada ainda ! Começe cadastrando a primeira" />
         </View>
       }
     />

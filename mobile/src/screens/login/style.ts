@@ -16,8 +16,8 @@ export const styles = StyleSheet.create({
   },
   loginContainer : {
     gap: 12,
-    justifyContent : 'flex-start',
-    alignItems : 'flex-start',
+    justifyContent : 'center',
+    alignItems : 'center',
     width : '80%',
     marginHorizontal : 'auto'
   },

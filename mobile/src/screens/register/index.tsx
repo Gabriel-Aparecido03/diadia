@@ -139,7 +139,7 @@ export function Register() {
               errorMessage={confirmPasswordInvalidMessage}
             />
           </View>
-          <Button onPress={handleMakeRegister} variants="primary" style={{ marginTop: 12 }}>
+          <Button onPress={handleMakeRegister} variants="primary" style={{ marginTop: 12 , width :  '80%'}}>
             <Typography style={{ fontWeight: '800', fontSize: fontSizeSchemas.lg }} text="Criar" />
           </Button>
           <Typography
