@@ -2,6 +2,7 @@ import { UpdateHabitUseCase } from "@/domain/habits/application/use-cases/update
 import { AuthGuard } from "@/infra/auth/auth.guard"
 import { CurrentUser } from "@/infra/auth/current-user"
 import { Controller, Post, HttpCode, Body, UseGuards, Param, Put } from "@nestjs/common"
+import { ApiBody, ApiParam, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { z } from "zod"
 
 const bodySchemaValidation = z.object({
@@ -19,8 +20,20 @@ const paramSchemaValidation = z.object({
 
 type bodyType = z.infer<typeof bodySchemaValidation>
 
-type paramType = z.infer<typeof paramSchemaValidation>
+class UpdatedHabitDto implements bodyType {
+  @ApiProperty()
+  description: string;
+  @ApiProperty()
+  name: string;
+  @ApiProperty()
+  weekday: {
+    timeInSeconds: number;
+    weekday: number;
+  }[];
+}
 
+type paramType = z.infer<typeof paramSchemaValidation>
+@ApiTags('Habit')
 @Controller('/habit/:habitId')
 export class UpdateHabitController {
   constructor(private updateHabitUseCase: UpdateHabitUseCase) { }
@@ -28,6 +41,8 @@ export class UpdateHabitController {
   @Put()
   @HttpCode(204)
   @UseGuards(AuthGuard)
+  @ApiParam({ name : 'habitId'})
+  @ApiBody({ type : UpdatedHabitDto })
   async handle(@Body() { description, name, weekday }: bodyType, @CurrentUser() { sub },@Param() { habitId }: paramType) {
     await this.updateHabitUseCase.execute({ description, name, userId: sub, habitId , weekday })
   }

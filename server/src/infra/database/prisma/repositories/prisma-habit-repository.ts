@@ -28,7 +28,6 @@ export class PrismaHabitRepository implements HabitRepository {
 
   async update(habit: Habit): Promise<void> {
     const data = new PrismaHabitMapper().toPrisma(habit)
-
     if (habit.weekdays.getNewItems().length > 0) {
       habit.weekdays.getNewItems().map(async (i) => {
         await this.prismaService.habitWeekDays.create({
@@ -78,12 +77,18 @@ export class PrismaHabitRepository implements HabitRepository {
   }
 
   async fetchByDate({ date, userId }: { date: Date, userId: string }): Promise<Habit[]> {
+    const dateFormat = new Date(date)
     const habits = await this.prismaService.habit.findMany({
       where: {
         createdAt: {
-          lte: date.toISOString(),
+          lte: dateFormat,
         },
-        
+        user_id: userId,
+        HabitWeekDays : {
+          some : {
+            week_day : dateFormat.getDay()
+          }
+        }
       },
       include: {
         HabitWeekDays: true
@@ -100,32 +105,58 @@ export class PrismaHabitRepository implements HabitRepository {
       where: {
         habit: {
           user_id: userId,
-          createdAt: {
-            lte: date.toISOString(),
-          },
         },
+        day: { 
+          date
+        }
       }
     })
-
     return habits.map(i => new PrismaHabitMapper().toDomain(i.habit))
   }
 
   async fetchStatsByMonth({ start, end, userId }: { start: Date; end: Date; userId: string; }): Promise<Habit[]> {
-    const res = await this.prismaService.habit.findMany({
+    /* const habits = await this.prismaService.day.findMany({
       where: {
-        createdAt: {
-          gte: start,
-          lte: end
+        date: {
+          lte: end.toISOString(),
+          gte: start.toISOString()
         },
-        user_id: userId
+        
       },
       include: {
-        HabitDay: true,
-        HabitWeekDays: true
+        HabitDay: {
+          include: { habit: true }
+        },
       }
     })
 
-    return res.map(i => new PrismaHabitMapper().toDomainWithWeekdaysAtHabitDay(i))
+    return res.map(i => new PrismaHabitMapper().toDomainWithWeekdaysAtHabitDay(i)) */
+
+    /* const dates = await this.prismaService.habitDay.findMany({
+      where: {
+        day: {
+          date: {
+            lte: end.toISOString(),
+            gte: start.toISOString()
+          },
+        }
+      },
+      include: {
+        habit: true
+      }
+    })
+
+    const habits = await this.prismaService.habit.findMany({
+      where: {
+        createdAt: {
+          lte: end.toISOString(),
+          gte: start.toISOString()
+        }
+      }
+    })
+*/
+
+    return null
   }
 
   async makeHabitDone({ dayId, habitId }: { dayId: string; habitId: string; }): Promise<void> {

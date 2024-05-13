@@ -10,15 +10,20 @@ import { useEffect, useState } from "react";
 import { validateEmail } from "../../utils/validate-email";
 import { useUser } from "../../hooks/useUser";
 import Toast from "react-native-toast-message";
-
+import { AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 export function Login() {
 
   const navigation = useNavigation()
 
-  const { makeLogin , user } = useUser()
+  const { makeLogin, user } = useUser()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const [showPassword, setShowPassword] = useState(false)
+
+  const [isPending, setIsPending] = useState(false)
 
   const [emailInvalid, setEmailInvalid] = useState(false)
   const [passwordInvalid, setPasswordInvalid] = useState(false)
@@ -50,29 +55,38 @@ export function Login() {
   }
 
   async function handleMakeLogin() {
+    setIsPending(true)
     if (validatedFields()) {
-      const res  =  await makeLogin(email,password)
-      if(res) {
+      const res = await makeLogin(email, password)
+      setIsPending(false)
+      if (res) {
+        setEmail('')
+        setPassword('')
         return navigation.navigate('home' as never)
       }
       Toast.show({
-        type : 'error',
-        text1 : 'Email e/ou senha inválidos',
-        text2  : 'Valide que seja um senha/email válido, ou o email ja esteja cadastrado !'
+        type: 'error',
+        text1: 'Email e/ou senha inválidos',
+        text2: 'Valide que seja um senha/email válido, ou o email ja esteja cadastrado !',
+        position: 'bottom',
+        visibilityTime: 2000,
+        autoHide: true,
       })
+      setEmailInvalid(true)
+      setPasswordInvalid(true)
     }
   }
 
   useEffect(() => {
     function redirect() {
-      if(user) navigation.navigate('home' as never)
+      if (user) navigation.navigate('home' as never)
     }
 
     redirect()
   })
 
   return (
-    <BaseScreen>
+    <BaseScreen showLoading={isPending}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Logo />
@@ -93,12 +107,15 @@ export function Login() {
             <TextField
               value={password}
               onChangeText={e => setPassword(e)}
-              secureTextEntry
+              secureTextEntry={!showPassword}
               error={passwordInvalid}
               errorMessage={passwordInvalidMessage}
+              iconRight={showPassword ?
+                <Entypo name="eye-with-line" size={24} color="white" onPress={() => setShowPassword(false)} /> :<AntDesign onPress={() => setShowPassword(true)} name="eye" size={24} color="white" /> 
+              }
             />
           </View>
-          <Button onPress={handleMakeLogin} variants="primary" style={{ marginTop: 12, width : '80%' }}>
+          <Button disabled={isPending} onPress={handleMakeLogin} variants="primary" style={{ marginTop: 12, width: '80%' }}>
             <Typography style={{ fontWeight: '800', fontSize: fontSizeSchemas.lg }} text="Acessar" />
           </Button>
           <Typography

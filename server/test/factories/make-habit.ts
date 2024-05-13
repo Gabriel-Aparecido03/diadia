@@ -43,7 +43,7 @@ export class HabitFactory {
     weekdays.getItems().map(async (i) => {
       await this.prismaService.habitWeekDays.create({
         data: {
-          datetime: i.datetime,
+          timeInSeconds: BigInt(Number(i.timeInSeconds)),
           week_day: i.weekday,
           createdAt: i.createdAt,
           habit_id: i.habitId.toString(),

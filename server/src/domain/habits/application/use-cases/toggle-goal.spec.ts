@@ -5,6 +5,8 @@ import { DayRepositoryInMemory } from "test/repositories/in-memory-day-repositor
 import { makeGoal } from "test/factories/make-goal"
 import { ToogleGoalUseCase } from "./toggle-goal"
 import { makeDay } from "test/factories/make-day"
+import { startOfTheDay } from "./utils/start-of-the-day"
+import { Day } from "../../enterprise/entities/day"
 
 describe('Delete Goal - Unit', () => {
   let sut: ToogleGoalUseCase
@@ -14,8 +16,8 @@ describe('Delete Goal - Unit', () => {
 
   beforeEach(() => {
     inMemoryUserRepository = new UserRepositoryInMemory()
-    inMemoryGoalRepository = new GoalRepositoryInMemory()
     inMemoryDayRepository = new DayRepositoryInMemory()
+    inMemoryGoalRepository = new GoalRepositoryInMemory(inMemoryDayRepository)
     sut = new ToogleGoalUseCase(inMemoryGoalRepository, inMemoryUserRepository, inMemoryDayRepository)
   })
 
@@ -38,10 +40,10 @@ describe('Delete Goal - Unit', () => {
     const user = makeUser({ password: 'password-hashed' })
     inMemoryUserRepository.create(user)
 
-    const goal = makeGoal({ userId: user.id })
+    const goal = makeGoal({ userId: user.id , deadline : Day.create({date : startOfTheDay(new Date())}),})
     inMemoryGoalRepository.create(goal)
 
-    const day = makeDay({ date: new Date(new Date().toDateString()), goals: [goal] })
+    const day = makeDay({ date: startOfTheDay(new Date()), goals: [goal] })
     inMemoryDayRepository.create(day)
 
     await sut.execute({

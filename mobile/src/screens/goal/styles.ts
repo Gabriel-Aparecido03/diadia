@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     flexDirection : 'row',
     justifyContent : 'space-between',
     alignItems : 'center',
-    textAlign : 'center'
+    textAlign : 'center',
   },
   containerListOfDays : {
     justifyContent : 'flex-start',

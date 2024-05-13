@@ -12,6 +12,9 @@ import { validateEmail } from "../../utils/validate-email";
 import { registerUserAccount } from "../../services/register-account";
 import Toast from "react-native-toast-message";
 
+import { AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+
 export function Register() {
 
   const navigation = useNavigation()
@@ -20,6 +23,11 @@ export function Register() {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+
+  const [isPending, setIsPending] = useState(false)
+
+  const [passwordVisible, setPasswordVisible] = useState(false)
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
 
   const [emailInvalid, setEmailInvalid] = useState(false)
   const [nameInvalid, setNameInvalid] = useState(false)
@@ -74,26 +82,38 @@ export function Register() {
   }
 
   async function handleMakeRegister() {
+    setIsPending(true)
     try {
       if (validatedFields()) {
         const res = await registerUserAccount({ email, name, password })
-        if(res.status === 200) {
+        setIsPending(false)
+        if (res.status === 200) {
+          setEmailInvalid(true)
           Toast.show({
-            type : 'success',
-            autoHide : true,
-            text1 : 'Conta Criada com Sucesso !!',
-            text2 : 'Agora basta fazer seu login !'
+            type: 'success',
+            autoHide: true,
+            text1: 'Conta Criada com Sucesso !!',
+            text2: 'Agora basta fazer seu login !',
+            position: 'bottom',
+            visibilityTime: 2000,
           })
-          navigation.navigate('login' as never)
+          return navigation.navigate('login' as never)
         }
+        Toast.show({
+          type: 'error',
+          autoHide: true,
+          text1: 'Email inválido',
+          text2: 'Verique o email , se já tiver uma conta com ele , faça o login !',
+          position: 'bottom',
+          visibilityTime: 2000,
+        })
+        setEmailInvalid(true)
       }
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   return (
-    <BaseScreen>
+    <BaseScreen showLoading={isPending}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Logo />
@@ -124,9 +144,12 @@ export function Register() {
             <TextField
               value={password}
               onChangeText={e => setPassword(e)}
-              secureTextEntry
+              secureTextEntry={!passwordVisible}
               error={passwordInvalid}
               errorMessage={passwordInvalidMessage}
+              iconRight={passwordVisible ?
+                <AntDesign onPress={() => setPasswordVisible(false)} name="eye" size={24} color="white" /> : <Entypo name="eye-with-line" size={24} color="white" onPress={() => setPasswordVisible(true)} />
+              }
             />
           </View>
           <View style={styles.registerBox}>
@@ -134,12 +157,15 @@ export function Register() {
             <TextField
               value={confirmPassword}
               onChangeText={e => setConfirmPassword(e)}
-              secureTextEntry
+              secureTextEntry={!confirmPasswordVisible}
               error={confirmPasswordInvalid}
               errorMessage={confirmPasswordInvalidMessage}
+              iconRight={confirmPasswordVisible ?
+                <AntDesign onPress={() => setConfirmPasswordVisible(false)} name="eye" size={24} color="white" /> : <Entypo name="eye-with-line" size={24} color="white" onPress={() => setConfirmPasswordVisible(true)} />
+              }
             />
           </View>
-          <Button onPress={handleMakeRegister} variants="primary" style={{ marginTop: 12 , width :  '80%'}}>
+          <Button disabled={isPending} onPress={handleMakeRegister} variants="primary" style={{ marginTop: 12, width: '80%' }}>
             <Typography style={{ fontWeight: '800', fontSize: fontSizeSchemas.lg }} text="Criar" />
           </Button>
           <Typography

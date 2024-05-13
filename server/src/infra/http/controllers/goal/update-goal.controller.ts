@@ -2,6 +2,7 @@ import { UpdateGoalUseCase } from "@/domain/habits/application/use-cases/update-
 import { AuthGuard } from "@/infra/auth/auth.guard"
 import { CurrentUser } from "@/infra/auth/current-user"
 import { Controller, HttpCode, Body, UseGuards, Param, Put } from "@nestjs/common"
+import { ApiBody, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { z } from "zod"
 
 const bodySchemaValidation = z.object({
@@ -15,8 +16,16 @@ const paramSchemaValidation = z.object({
 
 type bodyType = z.infer<typeof bodySchemaValidation>
 
-type paramType = z.infer<typeof paramSchemaValidation>
+class UpdateGoalDto {
+  @ApiProperty()
+  description : String
 
+  @ApiProperty()
+  name : String
+}
+
+type paramType = z.infer<typeof paramSchemaValidation>
+@ApiTags('Goal')
 @Controller('/goal/:goalId')
 export class UpdateGoalController {
   constructor(private updateGoalUseCase: UpdateGoalUseCase) { }
@@ -24,6 +33,7 @@ export class UpdateGoalController {
   @Put()
   @HttpCode(204)
   @UseGuards(AuthGuard)
+  @ApiBody({ type : UpdateGoalDto})
   async handle(@Body() { description, name }: bodyType, @CurrentUser() { sub }, @Param() { goalId }: paramType) {
     await this.updateGoalUseCase.execute({ description, name, userId: sub, goalId })
   }

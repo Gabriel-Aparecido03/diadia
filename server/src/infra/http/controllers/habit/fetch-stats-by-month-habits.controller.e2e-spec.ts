@@ -39,16 +39,16 @@ describe('Fetch stats by month habit - E2E', () => {
 
     const habit1 = makeHabit({
       userId: user.id,
-      createdAt: new Date(),
+      createdAt: new Date(new Date().toISOString()),
     })
 
     const habit2 = makeHabit({
       userId: user.id,
-      createdAt: new Date('2024-03-29T18:21:06.266Z'),
+      createdAt: new Date(new Date().toISOString()),
     })
 
-    const weekday1 = Weekday.create({ datetime: new Date(), habitId: habit1.id, weekday: 0 })
-    const weekday2 = Weekday.create({ datetime: new Date('2024-03-29T18:21:06.266Z'), habitId: habit2.id, weekday: 0 })
+    const weekday1 = Weekday.create({ timeInSeconds: 1200, habitId: habit1.id, weekday: 0 })
+    const weekday2 = Weekday.create({ timeInSeconds: 1200, habitId: habit2.id, weekday: 0 })
 
     const weekdayList1 = new WeekdayList([weekday1])
     habit1.weekdays = weekdayList1
@@ -61,13 +61,13 @@ describe('Fetch stats by month habit - E2E', () => {
     const accessToken = jwt.sign({ sub: user.id.toString() })
 
     const response = await request(app.getHttpServer())
-      .get('/habits/stats/month')
+      .get(`/habits/stats/month?date=${new Date()}`)
       .send({
         date: new Date()
       })
       .set('Authorization', `Bearer ${accessToken}`)
 
     expect(response.status).toEqual(200)
-    expect(response.body).toHaveLength(2)
+    expect(response.body).toHaveLength(30 || 31 || 28 || 29)
   })
 })

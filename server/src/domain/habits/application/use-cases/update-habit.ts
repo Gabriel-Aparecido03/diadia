@@ -38,7 +38,6 @@ export class UpdateHabitUseCase {
     if (!user.id.equals(habit.userId)) throw new NotAllowed()
 
     const weekdays = weekday.map(i => Weekday.create({ timeInSeconds: i.timeInSeconds, habitId: habit.id, weekday: i.weekday, }))
-
     habit.description = description
     habit.name = name
     habit.weekdays.update(weekdays)

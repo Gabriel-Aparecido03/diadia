@@ -2,6 +2,7 @@ import { UpdateUserUseCase } from "@/domain/habits/application/use-cases/update-
 import { AuthGuard } from "@/infra/auth/auth.guard"
 import { CurrentUser } from "@/infra/auth/current-user"
 import { Controller, Post, HttpCode, Body, UseGuards, Put } from "@nestjs/common"
+import { ApiBody, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { z } from "zod"
 
 const bodySchemaValidation = z.object({
@@ -12,6 +13,16 @@ const bodySchemaValidation = z.object({
 
 type bodyType = z.infer<typeof bodySchemaValidation>
 
+class UserCreatedDTO implements bodyType {
+  @ApiProperty()
+  email: string;
+  @ApiProperty()
+  password: string;
+  @ApiProperty()
+  name: string;
+}
+
+@ApiTags('Session')
 @Controller('/user')
 export class UpdateUserController {
   constructor(private updateUserUseCase: UpdateUserUseCase) { }
@@ -19,6 +30,7 @@ export class UpdateUserController {
   @Put()
   @HttpCode(204)
   @UseGuards(AuthGuard)
+  @ApiBody({ type : UserCreatedDTO})
   async handle(@Body() requestBody: bodyType,@CurrentUser() { sub }) {
     const { email, password, name } = bodySchemaValidation.parse(requestBody)
     await this.updateUserUseCase.execute({ email, password ,name, id : sub})

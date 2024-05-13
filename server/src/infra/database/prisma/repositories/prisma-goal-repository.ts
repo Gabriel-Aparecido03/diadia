@@ -9,8 +9,6 @@ export class PrismaGoalRepository implements GoalRepository {
 
   constructor(private prismaService: PrismaService) { }
 
-
-
   async create(goal: Goal): Promise<void> {
     const data = new PrismaGoalMapper().toPrisma(goal)
     await this.prismaService.goal.create({ data })
@@ -60,6 +58,9 @@ export class PrismaGoalRepository implements GoalRepository {
         goal: {
           user_id: userId,
         },
+        day : {
+          date : new Date(date)
+        }
       }
     })
     if (!goals) return null

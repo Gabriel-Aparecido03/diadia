@@ -6,15 +6,18 @@ import { HabitRepositoryInMemory } from "test/repositories/in-memory-habit-repos
 import { DeleteHabitUseCase } from "./delete-habit"
 import { makeHabit } from "test/factories/make-habit"
 import { NotAllowed } from "./errors/not-allowed"
+import { DayRepositoryInMemory } from "test/repositories/in-memory-day-repository"
 
 describe('Delete habit - Unit', () => {
   let sut: DeleteHabitUseCase
   let inMemoryUserRepository: UserRepositoryInMemory
   let inMemoryHabitRepository: HabitRepositoryInMemory
+  let inMemoryDayRepository : DayRepositoryInMemory
 
   beforeEach(() => {
     inMemoryUserRepository = new UserRepositoryInMemory()
-    inMemoryHabitRepository = new HabitRepositoryInMemory()
+    inMemoryDayRepository = new DayRepositoryInMemory()
+    inMemoryHabitRepository = new HabitRepositoryInMemory(inMemoryDayRepository)
     sut = new DeleteHabitUseCase(inMemoryHabitRepository, inMemoryUserRepository)
   })
 

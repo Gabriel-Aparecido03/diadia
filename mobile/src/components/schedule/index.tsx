@@ -3,6 +3,8 @@ import { Checkbox, TextField } from "../ui"
 import { styles } from "./styles"
 import { useEffect, useState } from "react"
 import { maskHourAndMinutes } from "../../utils/mask-hour-and-minutes"
+import { secondsToHoursMinutes } from "../../utils/convert-to-hour-and-minutes"
+import { hoursMinutesToSeconds } from "../../utils/convert-to-seconds"
 
 interface SchedulePropsType {
   weekdayName: string
@@ -14,10 +16,7 @@ interface SchedulePropsType {
 }
 
 export function Schedule({ handleToggleWeekDay, weekdayName, checked, weekdayIndex, timeInSecondsInitial, onChange }: SchedulePropsType) {
-  const [timeInSeconds, setTimeInSeconds] = useState('')
-  useEffect(() => {
-    setTimeInSeconds(timeInSecondsInitial ?? '0')
-  }, [])
+  const [timeInSeconds, setTimeInSeconds] = useState(timeInSecondsInitial)
 
   return (
     <View style={styles.containerSchedule}>
@@ -29,10 +28,10 @@ export function Schedule({ handleToggleWeekDay, weekdayName, checked, weekdayInd
       <TextField
         keyboardType="number-pad"
         style={{ width: 80 }}
-        value={maskHourAndMinutes(timeInSeconds)}
+        value={maskHourAndMinutes(secondsToHoursMinutes(Number(timeInSeconds)))}
         onChangeText={e => {
           setTimeInSeconds(e)
-          onChange({ index : weekdayIndex , value : Number(timeInSeconds)})
+          onChange({ index: weekdayIndex, value: hoursMinutesToSeconds({ hours: Number(timeInSeconds.slice(0, 1)), minutes: Number(timeInSeconds.slice(1, 3)) }) })
         }}
       />
     </View>

@@ -7,7 +7,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginBottom: 2,
-    gap : 8
+    gap : 8,
+    zIndex : 9
   },
   containerCheckbox: {
     height: 40,

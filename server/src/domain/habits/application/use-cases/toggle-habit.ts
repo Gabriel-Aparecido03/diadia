@@ -41,7 +41,6 @@ export class ToogleHabitUseCase {
     }
 
     const habitIsAlreadyDone = await this.dayRepository.getByHabitAlreadyDone({ date, habitId })
-
     if (!habitIsAlreadyDone) {
       await this.habitRepository.makeHabitDone({ dayId : day.id.toString() , habitId})
     }

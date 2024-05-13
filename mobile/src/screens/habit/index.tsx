@@ -43,6 +43,7 @@ export function Habit({ route: { params } }) {
   }
 
   function handleChangeTime({ index, value }: { value: number, index: number }) {
+
     if (weekdays.find(i => i.weekday === index)) {
       const copy = weekdays.map(i => {
         if (i.weekday === index) {
@@ -130,7 +131,6 @@ export function Habit({ route: { params } }) {
     getInfosAboutHabit()
   }, [])
 
-
   return (
     <BaseScreen
       header={<Header showBackButton />}
@@ -147,7 +147,7 @@ export function Habit({ route: { params } }) {
       showLoading={isLoading}
     >
       {!isLoading && <>
-        <Typography text="Criação de um hábito" style={{ fontSize: fontSizeSchemas["3xl"], fontWeight: '700' }} />
+        <Typography text={`${!isEditing ? 'Criação' : 'Edição'} de um hábito`} style={{ fontSize: fontSizeSchemas["3xl"], fontWeight: '700' }} />
         <View style={{ marginTop: 12, marginBottom: 16 }}>
           <Typography style={{ marginBottom: 12 }} text="Qual o seu comprometimento ?" />
           <TextField
@@ -182,7 +182,7 @@ export function Habit({ route: { params } }) {
                 handleToggleWeekDay={handleToggleWeekDay}
                 weekdayIndex={x}
                 weekdayName={i}
-                timeInSecondsInitial={String(weekdays[x]?.timeInSeconds ?? '')}
+                timeInSecondsInitial={weekdays.find(y => y.weekday === x)?.timeInSeconds.toString() ?? '4500'}
                 onChange={handleChangeTime}
               />
             )}

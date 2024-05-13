@@ -46,7 +46,7 @@ describe('Update Habit - E2E', () => {
     const weekdayList1 = new WeekdayList([weekday])
     habit.weekdays = weekdayList1
 
-    const accessToken = jwt.sign({ sub: { value: user.id.toString() } })
+    const accessToken = jwt.sign({ sub: user.id.toString() })
 
     await userFactory.execute(user)
     await habitFactory.execute(habit)

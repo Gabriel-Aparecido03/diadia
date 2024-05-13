@@ -3,7 +3,8 @@ import { AuthGuard } from "@/infra/auth/auth.guard"
 import { CurrentUser } from "@/infra/auth/current-user"
 import { Controller, HttpCode, UseGuards, Get } from "@nestjs/common"
 import { UserPresenter } from "../../presenters/user-presenter"
-
+import { ApiTags } from "@nestjs/swagger"
+@ApiTags('Session')
 @Controller('/session/me')
 export class GetByIdUserController {
   constructor(private getByIdUserUseCase : GetByIdUserUseCase) {}

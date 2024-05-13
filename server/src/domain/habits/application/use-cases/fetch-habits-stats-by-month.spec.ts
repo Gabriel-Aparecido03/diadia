@@ -13,8 +13,8 @@ describe('Fetch by date habit - Unit', () => {
 
   beforeEach(() => {
     inMemoryUserRepository = new UserRepositoryInMemory()
-    inMemoryHabitRepository = new HabitRepositoryInMemory()
     inMemoryDayRepository = new DayRepositoryInMemory()
+    inMemoryHabitRepository = new HabitRepositoryInMemory(inMemoryDayRepository)
     sut = new FetchStatsByMonthHabitsUseCase(inMemoryHabitRepository, inMemoryUserRepository)
   })
 
@@ -30,6 +30,6 @@ describe('Fetch by date habit - Unit', () => {
       date : new Date()
     })
 
-    expect(res).toHaveLength(1)
+    expect(res).toHaveLength(30 || 31 || 28 || 29)
   })
 })

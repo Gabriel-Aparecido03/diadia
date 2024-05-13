@@ -49,7 +49,7 @@ describe('Delete Habit - E2E', () => {
     await userFactory.execute(user)
     await habitFactory.execute(habit)
 
-    const accessToken = jwt.sign({ sub: { value: user.id.toString() } })
+    const accessToken = jwt.sign({ sub: user.id.toString() })
 
     const response = await request(app.getHttpServer())
       .get(`/habit/${habit.id}`)

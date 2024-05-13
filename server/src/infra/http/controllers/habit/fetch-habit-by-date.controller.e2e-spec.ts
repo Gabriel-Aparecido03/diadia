@@ -59,6 +59,5 @@ describe('Fetch stats by month habit - E2E', () => {
       .set('Authorization', `Bearer ${accessToken}`)
 
     expect(response.status).toEqual(200)
-    console.log(response.body)
   })
 })

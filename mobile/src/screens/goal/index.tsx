@@ -16,6 +16,8 @@ import { updateGoal } from "../../services/update-goal";
 export function Goal({ route: { params } }) {
   const navigation = useNavigation()
 
+  const [loading, setLoading ] = useState(false)
+
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [deadline, setDeadline] = useState<Date>(new Date())
@@ -30,6 +32,7 @@ export function Goal({ route: { params } }) {
   const [showModal, setShowModal] = useState(false)
 
   async function getInfosAboutGoal() {
+    setLoading(true)
     if (params?.id) {
       const { status, data } = await getbyIdGoal({ id: params.id })
       if (status === 200) {
@@ -38,6 +41,7 @@ export function Goal({ route: { params } }) {
         setTitle(data.name)
       }
     }
+    setLoading(false)
   }
 
   function valitedFields() {
@@ -99,6 +103,7 @@ export function Goal({ route: { params } }) {
   return (
     <BaseScreen
       header={<Header showBackButton />}
+      showLoading={loading}
       modal={
         <ModalConfirmation
           subtitle={isDeleting ? "Essa ação irá apagar essa meta ! Deseja continuar ?" : "Essa ação irá editar essa meta ! Deseja continuar ?"}
@@ -140,7 +145,7 @@ export function Goal({ route: { params } }) {
           </Button>
         </View>
       </View>}
-      <View style={{ marginTop: 24 }}>
+      <View style={{ marginTop: 24 , flex : 1, justifyContent : 'flex-end' }}>
         <Button
           onPress={async () => {
             if (!isEditing) {

@@ -33,7 +33,7 @@ describe('Register User - E2E', () => {
     })
 
     await userFactory.execute(user)
-    const accessToken = jwt.sign({ sub: { value: user.id.toString() } })
+    const accessToken = jwt.sign({ sub: user.id.toString() })
 
     const response = await request(app.getHttpServer())
       .put('/user')

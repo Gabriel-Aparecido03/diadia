@@ -1,7 +1,16 @@
 import { DayRepository } from "@/domain/habits/application/repositories/day-repository";
+import { datesAreOnSameDay } from "@/domain/habits/application/use-cases/utils/is-the-same-day";
 import { Day } from "@/domain/habits/enterprise/entities/day";
 
 export class DayRepositoryInMemory implements DayRepository {
+
+  async getByHabitAlreadyDone({ date, habitId }: { habitId: string; date: Date; }): Promise<Boolean> {
+    return !!this.items.find(x => datesAreOnSameDay(date , x.date ) && x.habits.find( y => y.id.toString() === habitId )) 
+  }
+
+  async getByGoalAlreadyDone({ date, goalId }: { goalId: string; date: Date; }): Promise<Boolean> {
+    return !!this.items.find(x => datesAreOnSameDay(date , x.date ) && x.goals.find( y => y.id.toString() === goalId )) 
+  }
 
   public items: Day[] = []
 

@@ -11,6 +11,7 @@ type UpdateHabitPayload = {
 }
 
 export async function updateHabit({ id, description, name, weekday }: UpdateHabitPayload) {
+  console.log(weekday)
   const res = await api.put({ url: `/habit/${id}`, body: { description, name, weekday } })
   return res
 }

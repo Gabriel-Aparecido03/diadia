@@ -41,7 +41,6 @@ export class ToogleGoalUseCase {
     }
 
     const goalIsAlreadyDone = await this.dayRepository.getByGoalAlreadyDone({ date, goalId })
-
     if (!goalIsAlreadyDone) {
       await this.goalRepository.makeGoalDone({ dayId : day.id.toString() , goalId})
     }

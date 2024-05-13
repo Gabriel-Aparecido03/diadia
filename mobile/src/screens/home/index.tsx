@@ -15,10 +15,15 @@ import { ListOfGoals } from "../../components/list-of-goals";
 import { toggleGoal } from "../../services/toggle-goal";
 import { hintForRoutine } from "../../utils/hints-for-routine";
 import { MaterialIcons } from '@expo/vector-icons';
+import { fetchSummaryMonth } from "../../services/fetch-summary-month";
+import { fetchSummaryWeek } from "../../services/fetch-summary-week";
 export function Home() {
 
   const isFocused = useIsFocused();
   const navigation = useNavigation()
+
+  const startDate = dayjs().startOf('week')
+  const endDate = dayjs().endOf('week')
 
   const [possibleHabits, setPossibleHabits] = useState([])
   const [completedHabits, setCompletedHabits] = useState([])
@@ -28,9 +33,10 @@ export function Home() {
   const [possibleGoals, setPossibleGoals] = useState([])
   const [completedGoals, setCompletedGoals] = useState([])
 
+  const [allHabitsFromWeek, setAllHabitsFromWeek] = useState([])
+
   const [showHintModal, setShowHintModal] = useState(false)
   const [hint, setHint] = useState({})
-
 
   async function fetchHabits() {
     setLoading(true)
@@ -45,7 +51,7 @@ export function Home() {
 
   async function fetchGoals() {
     setLoading(true)
-    const today = dayjs().endOf('day').toDate()
+    const today = dayjs().startOf('day').toDate()
     const res = await gettingGoalsToday(today)
     if (res.status === 200) {
       setPossibleGoals(res.data.possibleGoals)
@@ -54,10 +60,18 @@ export function Home() {
     setLoading(false)
   }
 
-  useEffect(() => {
-    Promise.all([fetchGoals(), fetchHabits()])
-  }, [isFocused])
+  async function handleGetsummary() {
+    setLoading(true)
+    const res = await fetchSummaryWeek(new Date())
+    if(res.status === 200 ) {
+      setAllHabitsFromWeek(res.data)
+    }
+    setLoading(false)
+  }
 
+  useEffect(() => {
+    Promise.all([fetchGoals(), fetchHabits(), handleGetsummary()])
+  }, [isFocused])
 
   async function handleSuggest() {
     setHint(hintForRoutine[Math.floor(Math.random() * hintForRoutine.length)])
@@ -77,21 +91,31 @@ export function Home() {
       showLoading={loading}>
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <View style={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
-          <WeekSummary />
+          <WeekSummary habitsWeek={allHabitsFromWeek} />
           <ListOfHabits
             completedHabits={completedHabits}
             possibleHabits={possibleHabits}
-            refetch={fetchHabits}
-            handleSuggest={handleSuggest}
+            refetch={async () => {
+              await fetchHabits()
+              await handleGetsummary()
+            }}
+            canAdd={possibleHabits.length > 0}
+            canEdit
+            text="Hábitos !"
           />
           <ListOfGoals
             completedGoals={completedGoals}
             possibleGoals={possibleGoals}
-            refetch={fetchGoals}
+            refetch={async () => {
+             await fetchGoals()
+            }}
+            text="Metas !"
+            canAdd={possibleGoals.length > 0}
+            canEdit
           />
         </View>
         <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 }}>
-          <Button variants="primary" style={{ width: '50%' }}>
+          <Button onPress={() => navigation.navigate('summary')} variants="primary" style={{ width: '50%' }}>
             <Typography text="Resumo" />
           </Button>
           <Button variants="tertiary" style={{ width: '16%' }} onPress={handleSuggest}>

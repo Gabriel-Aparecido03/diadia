@@ -21,6 +21,7 @@ export function TextField({ iconLeft, style, error = false, errorMessage, iconRi
             width: '100%',
             paddingHorizontal: 6,
             color: colorSchemas.zinc[100],
+            flex : 1,
           }]}
           placeholderTextColor={colorSchemas.zinc[400]}
           {...props}

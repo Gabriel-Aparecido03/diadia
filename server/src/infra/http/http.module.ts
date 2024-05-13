@@ -37,6 +37,8 @@ import { ToggleGoalController } from './controllers/goal/toggle-goal.controller'
 import { ToogleGoalUseCase } from '@/domain/habits/application/use-cases/toggle-goal';
 import { GetByIdGoalUseCase } from '@/domain/habits/application/use-cases/get-by-id-goal';
 import { GetByIdGoalController } from './controllers/goal/get-by-id-goal.controller';
+import { FetchStatsByWeekhHabitsUseCase } from '@/domain/habits/application/use-cases/fetch-stats-by-week';
+import { FetchStatsByWeekHabitsController } from './controllers/habit/fetch-stats-by-week-habits.controller';
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -58,7 +60,8 @@ import { GetByIdGoalController } from './controllers/goal/get-by-id-goal.control
     UpdateGoalController,
     FetchGoalByDateController,
     ToggleGoalController,
-    GetByIdGoalController
+    GetByIdGoalController,
+    FetchStatsByWeekHabitsController
   ],
   providers: [
     AuthenticateUserUseCase,
@@ -78,7 +81,8 @@ import { GetByIdGoalController } from './controllers/goal/get-by-id-goal.control
     UpdateGoalUseCase,
     FetchByDateGoalUseCase,
     ToogleGoalUseCase,
-    GetByIdGoalUseCase
+    GetByIdGoalUseCase,
+    FetchStatsByWeekhHabitsUseCase
   ],
 })
 export class HttpModule { }

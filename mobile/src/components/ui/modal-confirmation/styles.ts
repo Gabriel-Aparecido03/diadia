@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colorSchemas.zinc[900],
     borderRadius: 12,
     padding: 16,
-    width: '80%',
+    width: '90%',
     opacity: 1,
     zIndex : 9
   },
@@ -26,10 +26,9 @@ export const styles = StyleSheet.create({
     justifyContent : 'space-between'
   },
   contentModal: {
-    width: '80%',
-    marginHorizontal: '10%',
-    marginTop : 16,
-    marginBottom : 16,
+    width: '90%',
+    marginHorizontal: '5%',
+    marginVertical : 32
   },
   actionModal: {
     flexDirection: 'row',

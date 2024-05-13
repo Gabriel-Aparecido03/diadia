@@ -11,6 +11,6 @@ export async function registerUserAccount({ email, password, name }: authtentica
     const res = await api.post({ url: '/user', body: { email, password, name } })
     return res
   } catch (error) {
-    console.log(error)
+    throw error
   }
 }

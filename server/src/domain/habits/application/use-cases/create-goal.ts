@@ -7,7 +7,7 @@ import { UserRepository } from "../repositories/user-repository";
 import { InvalidCredentials } from "./errors/invalid-credentials";
 import { Injectable } from "@nestjs/common";
 
-interface CreateGoalUseCasePropsType {
+export interface CreateGoalUseCasePropsType {
   userId: string
   name: string
   description: string

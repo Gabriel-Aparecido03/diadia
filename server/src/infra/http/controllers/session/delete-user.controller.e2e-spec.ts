@@ -32,8 +32,7 @@ describe('Delete User - E2E', () => {
     })
 
     await userFactory.execute(user)
-    const accessToken = jwt.sign({ sub: { value: user.id.toString() } })
-    console.log(accessToken)
+    const accessToken = jwt.sign({ sub: user.id.toString() })
     const response = await request(app.getHttpServer())
       .delete('/user')
       .set('Authorization', `Bearer ${accessToken}`)

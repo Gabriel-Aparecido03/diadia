@@ -6,17 +6,21 @@ import { GoalRepositoryInMemory } from "test/repositories/in-memory-goal-reposit
 import { DeleteGoalUseCase } from "./delete-goal"
 import { makeGoal } from "test/factories/make-goal"
 import { NotAllowed } from "./errors/not-allowed"
+import { DayRepository } from "../repositories/day-repository"
+import { DayRepositoryInMemory } from "test/repositories/in-memory-day-repository"
 
 describe('Delete goal - Unit', () => {
   let sut: DeleteGoalUseCase
   let inMemoryUserRepository: UserRepositoryInMemory
   let inMemoryGoalRepository: GoalRepositoryInMemory
+  let inMemoryDayRepository : DayRepositoryInMemory
 
   beforeEach(() => {
     inMemoryUserRepository = new UserRepositoryInMemory()
-    inMemoryGoalRepository = new GoalRepositoryInMemory()
+    inMemoryDayRepository = new DayRepositoryInMemory()
+    inMemoryGoalRepository = new GoalRepositoryInMemory(inMemoryDayRepository)
     sut = new DeleteGoalUseCase(inMemoryGoalRepository, inMemoryUserRepository)
-  })
+  }) 
 
   it('should be to delete an goal', async () => {
     const user = makeUser({ password: 'password-hashed' })

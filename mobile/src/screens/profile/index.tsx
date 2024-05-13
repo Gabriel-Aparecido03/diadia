@@ -1,4 +1,4 @@
-import { FlatList, View } from "react-native";
+import { FlatList, Touchable, View } from "react-native";
 import { BaseScreen } from "../../components/base-screen";
 import { Typography, ProgressBar, Checkbox, TextField, Button } from "../../components/ui";
 import { fontSizeSchemas, colorSchemas } from "../../themes/default";
@@ -12,7 +12,9 @@ import { updateProfile } from "../../services/update-profile";
 import { deleteProfile } from "../../services/delete-profile";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
-
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 export function Profile() {
 
   const { user, makeLogout, gettingUserInfo } = useUser()
@@ -109,61 +111,34 @@ export function Profile() {
       </View>
       <View>
         <View style={styles.profileBox}>
-          <Typography text="Email" />
-          <TextField
-            value={email}
-            onChangeText={e => setEmail(e)}
-            placeholder="email@examplo.com"
-            error={emailInvalid}
-            errorMessage={emailInvalidMessage}
-          />
+          <Typography text="Nome" style={{ fontWeight: '600', fontSize: fontSizeSchemas["xl"] }} />
+          <Typography text={name} style={{ fontWeight: '500', fontSize: fontSizeSchemas.lg, color: colorSchemas.zinc[300] }} />
         </View>
         <View style={styles.profileBox}>
-          <Typography text="Nome" />
-          <TextField
-            value={name}
-            onChangeText={e => setName(e)}
-            placeholder="Exemplo"
-            error={nameInvalid}
-            errorMessage={nameInvalidMessage}
-          />
+          <Typography text="Email" style={{ fontWeight: '600', fontSize: fontSizeSchemas["xl"] }} />
+          <Typography text={email} style={{ fontWeight: '500', fontSize: fontSizeSchemas.lg, color: colorSchemas.zinc[300] }} />
         </View>
-        <View style={styles.profileBox}>
-          <Typography text="Senha" />
-          <TextField
-            value={password}
-            onChangeText={e => setPassword(e)}
-            secureTextEntry
-            error={passwordInvalid}
-            errorMessage={passwordInvalidMessage}
-          />
+        <View>
+          <Typography style={{ fontWeight: "700", fontSize: fontSizeSchemas["2xl"], marginTop: 16 }} text="General" />
+          <View style={{ gap: 16, marginTop: 24 }}>
+            <TouchableOpacity
+              onPress={() => { navigation.navigate('profile-edit' as never) }}
+              style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 4, gap: 8 }}
+            >
+              <AntDesign name="infocirlceo" size={24} color="white" />
+              <Typography text="Meus dados" style={{ fontWeight: '500', fontSize: fontSizeSchemas.lg, color: colorSchemas.zinc[300] }} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={async () => {
+                await makeLogout()
+                navigation.navigate('login')
+              }}
+              style={{ flexDirection: 'row',  paddingTop: 24 , justifyContent: 'flex-start', alignItems: 'center', padding: 4, gap: 8, borderTopColor: colorSchemas.zinc[400], borderWidth: 1, borderStyle: 'solid' }}>
+              <Ionicons name="exit-outline" size={24} color={colorSchemas.red[500]} />
+              <Typography text="Logout" style={{ color: colorSchemas.red[500], fontWeight: '500', fontSize: fontSizeSchemas.lg, }} />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.profileBox}>
-          <Typography text="Confirmar senha" />
-          <TextField
-            value={confirmPassword}
-            onChangeText={e => setConfirmPassword(e)}
-            secureTextEntry
-            error={confirmPasswordInvalid}
-            errorMessage={confirmPasswordInvalidMessage}
-          />
-        </View>
-        <Button onPress={handleProfileSave} style={{ marginTop: 32 }} variants="secondary" >
-          <Typography text={"Salvar"} />
-        </Button>
-
-        <View style={{ marginTop: 36, gap: 12 }}>
-          <Button onPress={handleProfileDelete} style={{ marginTop: 24 }} variants="error" >
-            <Typography text={"Apagar"} />
-          </Button>
-          <Button onPress={() => {
-            makeLogout()
-            navigation.navigate('login' as never)
-          }} style={{ marginTop: 24 }} variants="tertiary" >
-            <Typography text={"Sair"} />
-          </Button>
-        </View>
-
       </View>
     </BaseScreen>
   )

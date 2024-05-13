@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { HashGenerator } from "../cryptography/hash-generator";
 import { UserRepository } from "../repositories/user-repository";
 import { ResourceNotFound } from "./errors/resource-not-found";
+import { ApiTags } from "@nestjs/swagger";
 
 interface UpdateUserUseCasePropsType {
   password: string

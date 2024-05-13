@@ -26,8 +26,8 @@ export const styles = StyleSheet.create({
     justifyContent : 'space-between'
   },
   contentModal: {
-    width: '80%',
-    marginHorizontal: '10%',
+    width: '96%',
+    marginHorizontal: '2%',
     marginTop : 16,
     marginBottom : 16,
   },

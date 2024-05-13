@@ -11,10 +11,8 @@ export function Routes() {
 
   return (
     <View style={{ flex: 1, marginTop: top, paddingHorizontal: '5%', backgroundColor: "#09090A" }}>
-      <NavigationContainer>
-        <UserContextProvider>
-          <AppRoutes />
-        </UserContextProvider>
+      <NavigationContainer fallback={<View style={{ flex: 1, marginTop: top, paddingHorizontal: '5%', backgroundColor: "#09090A" }}></View>}>
+        <AppRoutes />
       </NavigationContainer>
     </View>
   )

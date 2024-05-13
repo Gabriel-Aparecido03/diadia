@@ -17,8 +17,8 @@ describe('Fetch by date habit - Unit', () => {
 
   beforeEach(() => {
     inMemoryUserRepository = new UserRepositoryInMemory()
-    inMemoryHabitRepository = new HabitRepositoryInMemory()
     inMemoryDayRepository = new DayRepositoryInMemory()
+    inMemoryHabitRepository = new HabitRepositoryInMemory(inMemoryDayRepository)
     sut = new FetchByDateHabitUseCase(inMemoryHabitRepository, inMemoryUserRepository)
   })
 
@@ -29,12 +29,13 @@ describe('Fetch by date habit - Unit', () => {
     const habit = makeHabit({ userId: user.id })
     inMemoryHabitRepository.create(habit)
 
-    const res = await sut.execute({
+    const { completedHabits , possibleHabits } = await sut.execute({
       userId: user.id.toString(),
       date: new Date()
     })
 
-    expect(res).toHaveLength(1)
+    expect(possibleHabits).toHaveLength(1)
+    expect(completedHabits).toHaveLength(0)
   })
 
   it('not should be fetch date habit by date with invalid credentials', async () => {

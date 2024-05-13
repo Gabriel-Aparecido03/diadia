@@ -32,13 +32,13 @@ export function ModalConfirmation({ onCancel, onClose, onConfirm, open, subtitle
           </TouchableOpacity>
         </View>
         <View style={styles.contentModal}>
-          <Typography text={subtitle} style={{ fontWeight : '400' , fontSize : fontSizeSchemas.lg , textAlign : 'center'}} />
+          <Typography text={subtitle} style={{ fontWeight : '400' , fontSize : fontSizeSchemas.xl , textAlign : 'center'}} />
         </View>
         <View style={styles.actionModal}>
-          <Button variants="tertiary" onPress={onCancel}>
+          <Button variants="tertiary" onPress={onCancel} style={{ width : '48%'}}>
             <Typography text="Não" />
           </Button>
-          <Button variants="primary" onPress={onConfirm}>
+          <Button variants="primary" onPress={onConfirm} style={{ width : '48%'}}>
             <Typography text="Sim" />
           </Button>
         </View>

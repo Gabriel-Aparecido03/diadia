@@ -4,6 +4,8 @@ export const styles = StyleSheet.create({
   profileBox : {
     gap:8,
     width : '100%',
-    marginBottom : 16
+    marginBottom : 16,
+    flexDirection : 'row',
+    alignItems : 'baseline'
   }
 })

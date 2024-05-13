@@ -11,16 +11,17 @@ import { NotAllowed } from "./errors/not-allowed"
 import { ToogleHabitUseCase } from "./toggle-habit"
 import { makeDay } from "test/factories/make-day"
 
-describe('Delete Habit - Unit', () => {
+describe('Toggle Habit - Unit', () => {
   let sut: ToogleHabitUseCase
   let inMemoryUserRepository: UserRepositoryInMemory
   let inMemoryHabitRepository: HabitRepositoryInMemory
   let inMemoryDayRepository: DayRepositoryInMemory
+  
 
   beforeEach(() => {
     inMemoryUserRepository = new UserRepositoryInMemory()
-    inMemoryHabitRepository = new HabitRepositoryInMemory()
     inMemoryDayRepository = new DayRepositoryInMemory()
+    inMemoryHabitRepository = new HabitRepositoryInMemory(inMemoryDayRepository)
     sut = new ToogleHabitUseCase(inMemoryHabitRepository, inMemoryUserRepository, inMemoryDayRepository)
   })
 
@@ -31,11 +32,15 @@ describe('Delete Habit - Unit', () => {
     const habit = makeHabit({ userId: user.id })
     inMemoryHabitRepository.create(habit)
 
+    const day = makeDay({ date : new Date('2024-04-24T03:00:00.000Z') })
+    inMemoryDayRepository.create(day)
+
     await sut.execute({
       habitId: habit.id.toString(),
       userId: user.id.toString()
     })
 
+    expect(inMemoryHabitRepository.items).toHaveLength(1)
     expect(inMemoryDayRepository.items[0].habits).toHaveLength(1)
   })
 
@@ -46,7 +51,7 @@ describe('Delete Habit - Unit', () => {
     const habit = makeHabit({ userId: user.id })
     inMemoryHabitRepository.create(habit)
 
-    const day = makeDay({ date: new Date(new Date().toDateString()), habits: [habit] })
+    const day = makeDay({ date: new Date(new Date('2024-04-24T03:00:00.000Z').toDateString()), habits: [habit] })
     inMemoryDayRepository.create(day)
 
     await sut.execute({

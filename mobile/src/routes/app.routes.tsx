@@ -8,6 +8,7 @@ import { Habit } from '../screens/habit';
 import { Goal } from '../screens/goal';
 import { Profile } from '../screens/profile';
 import { useUser } from '../hooks/useUser';
+import { ProfileEdit } from '../screens/profile-edit';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -46,6 +47,10 @@ export function AppRoutes() {
       <Screen
         name='profile'
         component={Profile}
+      />
+      <Screen
+        name='profile-edit'
+        component={ProfileEdit}
       />
     </Navigator>
   )

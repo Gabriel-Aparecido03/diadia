@@ -32,7 +32,7 @@ describe('Get by id User - E2E', () => {
     })
 
     await userFactory.execute(user)
-    const accessToken = jwt.sign({ sub: { value: user.id.toString() } })
+    const accessToken = jwt.sign({ sub: user.id.toString() })
 
     const response = await request(app.getHttpServer())
       .get('/session/me')
